@@ -1,8 +1,6 @@
-import { PrismaClient } from "./generated/prisma/client.js";
+import { prisma } from "./config.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-
-const prisma = new PrismaClient();
 
 const hashpassword = async (password) => {
   return await bcrypt.hashSync(password, 10);
@@ -53,7 +51,11 @@ export const login = async (req, res) => {
       where: {
         email: email,
       },
+      include: {
+        posts: true,
+      },
     });
+    const totalPosts = user.posts.length;
     if (!user) {
       return res.status(400).json({
         message: "User not found",
@@ -82,6 +84,7 @@ export const login = async (req, res) => {
       message: "Login successful",
       token: token,
       user: user,
+      totalPosts: totalPosts,
     });
   } catch (error) {
     res.status(500).json({
@@ -111,7 +114,11 @@ export const getProfile = async (req, res) => {
       where: {
         id: decode.id,
       },
+      include: {
+        posts: true,
+      },
     });
+    const totalPosts = user.posts.length;
     if (!user) {
       return res.status(404).json({
         message: "User not found",
@@ -120,6 +127,7 @@ export const getProfile = async (req, res) => {
     res.status(200).json({
       message: "Profile fetched successfully",
       user: user,
+      totalPosts: totalPosts,
     });
   } catch (error) {
     return res.status(500).json({
