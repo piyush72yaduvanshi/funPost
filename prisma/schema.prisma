@@ -23,7 +23,7 @@ model User {
 
   posts     Post[]
 
-    comments  Comment[]
+  comments  Comment[]
   likes   Like[]
 }
 

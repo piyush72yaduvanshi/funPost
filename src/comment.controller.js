@@ -11,7 +11,7 @@ export const createComment = async (req, res) => {
     }
     const comment = await prisma.comment.create({
       data: {
-        commentText: commentText,
+        text: commentText,
         userId: authorId,
         postId: postId,
       },

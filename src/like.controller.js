@@ -1,8 +1,8 @@
 import { prisma } from "./config.js";
 
 export const createLike = async (req,res) => {
-    const { postId } = req.body;4
-    const authorId = req.params.id;
+    const { postId } = req.body;
+    const authorId = parseInt(req.params.id);
 
     try {
         if(!postId || !authorId){
@@ -13,7 +13,7 @@ export const createLike = async (req,res) => {
         const like = await prisma.like.create({
             data: {
                 userId: authorId,
-                postId: postId
+                postId: parseInt(postId)
             }
         })
         if(!like){
